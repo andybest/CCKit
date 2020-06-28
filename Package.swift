@@ -10,6 +10,8 @@ let package = Package(
         .library(
             name: "CCKit",
             targets: ["CCKit"]),
+        .executable(name: "CCKitExample",
+                    targets: ["CCKitExample"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -21,6 +23,9 @@ let package = Package(
         .target(
             name: "CCKit",
             dependencies: []),
+        .target(
+            name: "CCKitExample",
+            dependencies: ["CCKit"]),
         .testTarget(
             name: "CCKitTests",
             dependencies: ["CCKit"]),

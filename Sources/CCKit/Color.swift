@@ -7,21 +7,19 @@
 
 import Foundation
 
-
-
 struct ColorStorage {
-    var x: Float
-    var y: Float
-    var z: Float
-    var a: Float
+    var x: Double
+    var y: Double
+    var z: Double
+    var a: Double
 
-    var r: Float { x }
-    var g: Float { y }
-    var b: Float { z }
+    var r: Double { x }
+    var g: Double { y }
+    var b: Double { z }
 
-    var h: Float { x }
-    var s: Float { y }
-    var l: Float { z }
+    var h: Double { x }
+    var s: Double { y }
+    var l: Double { z }
 
     func rgbToHsl() -> ColorStorage {
         let minVal = min(r, min(g, b))
@@ -33,7 +31,7 @@ struct ColorStorage {
             return ColorStorage(x: 0, y: 0, z: luminance, a: a)
         }
 
-        let saturation: Float
+        let saturation: Double
 
         if luminance < 0.5 {
             saturation = (maxVal - minVal) / (maxVal + minVal)
@@ -41,7 +39,7 @@ struct ColorStorage {
             saturation = (maxVal - minVal) / (2 - maxVal - minVal)
         }
 
-        let hue: Float
+        let hue: Double
 
         if r == maxVal  {
             hue = (g - b) / (maxVal - minVal)
@@ -55,7 +53,7 @@ struct ColorStorage {
         return ColorStorage(x: hue * 60, y: saturation, z: luminance, a: a)
     }
 
-    private func calculateHue(tc: Float, t1: Float, t2: Float) -> Float {
+    private func calculateHue(tc: Double, t1: Double, t2: Double) -> Double {
         if 6 * tc < 1 {
             return t2 + (t1 - t2) * 6 * tc
         } else if 2 * tc < 1 {
@@ -78,7 +76,7 @@ struct ColorStorage {
         let hueNormalised = h / 360
 
         // Make sure value is in the range 0..1
-        let normalizeValue: (Float) -> Float = { (x: Float) in (x < 0) ? 1 + x : (x > 1) ? x - 1 : x }
+        let normalizeValue: (Double) -> Double = { (x: Double) in (x < 0) ? 1 + x : (x > 1) ? x - 1 : x }
 
         let tr = normalizeValue(hueNormalised + (1 / 3))
         let tg = normalizeValue(hueNormalised)
@@ -96,12 +94,12 @@ enum ColorType {
     case hsl
 }
 
-struct Color {
+public struct Color {
     private var storage: ColorStorage
     private var type: ColorType
 
     /// Alpha component
-    var a: Float { storage.a }
+    public var a: Double { storage.a }
 
     var rgb: ColorStorage {
         switch type {
@@ -118,37 +116,32 @@ struct Color {
     }
 
     /// Red component
-    var r: Float { rgb.x }
+    public var r: Double { rgb.x }
 
     /// Green component
-    var g: Float { rgb.y }
+    public var g: Double { rgb.y }
 
     /// Blue component
-    var b: Float { rgb.z }
+    public var b: Double { rgb.z }
 
-    var hue: Float { hsl.x }
+    /// HSL Hue component
+    public var hue: Double { hsl.x }
 
-    var saturation: Float { hsl.y }
+    /// HSL Saturation component
+    public var saturation: Double { hsl.y }
 
-    var lightness: Float { hsl.z }
+    /// HSL Lightness component
+    public var lightness: Double { hsl.z }
 
-    /// CGColor value
-    var cgColor: CGColor {
-        let c = rgb
-        return CGColor(red: CGFloat(c.x), green: CGFloat(c.y), blue: CGFloat(c.z), alpha: CGFloat(c.a))
-    }
-
-    /// Red, Green, Blue, Alpha expressed as floats in the range 0..1
-    init(red: Float, green: Float, blue: Float, alpha: Float = 1.0) {
+    /// Red, Green, Blue, Alpha in the range 0..1
+    public init(red: Double, green: Double, blue: Double, alpha: Double = 1.0) {
         type = .rgb
         storage = ColorStorage(x: red, y: green, z: blue, a: alpha)
     }
 
-    /// Hue, Saturation, Lightness, Alpha expressed as floats in the range 0..1
-    init(hue: Float, saturation: Float, lightness: Float, alpha: Float = 1.0) {
+    /// Hue, as degrees in the range 0..360; Saturation, Lightness, Alpha in the range 0..1
+    public init(hue: Double, saturation: Double, lightness: Double, alpha: Double = 1.0) {
         type = .hsl
         storage = ColorStorage(x: hue, y: saturation, z: lightness, a: alpha)
     }
-
-    //init(luminance: Float, a)
 }
