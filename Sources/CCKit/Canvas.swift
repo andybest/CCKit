@@ -12,7 +12,7 @@ import Foundation
 open class Canvas {
     private var renderer: Renderer
 
-    public init(size: Size, outputType: OutputType) {
+    public init(size: Vec2, outputType: OutputType) {
         renderer = CoreGraphicsRenderer(type: outputType, size: size)
     }
 
@@ -48,17 +48,17 @@ extension Canvas: Drawable {
         set { renderer.strokeEnabled = newValue }
     }
 
-    public var size: Size { renderer.size }
+    public var size: Vec2 { renderer.size }
 
-    public func point(p: Point) {
+    public func point(p: Vec2) {
         renderer.point(p: p)
     }
 
-    public func line(p1: Point, p2: Point) {
+    public func line(p1: Vec2, p2: Vec2) {
         renderer.line(p1: p1, p2: p2)
     }
 
-    public func bezier(p1: Point, p2: Point, c1: Point, c2: Point) {
+    public func bezier(p1: Vec2, p2: Vec2, c1: Vec2, c2: Vec2) {
         renderer.bezier(p1: p1, p2: p2, c1: c1, c2: c2)
     }
 
@@ -70,11 +70,11 @@ extension Canvas: Drawable {
         renderer.ellipse(rect: rect)
     }
 
-    public func arc(location: Point, radius: Double, start: Double, stop: Double, clockwise: Bool) {
+    public func arc(location: Vec2, radius: Double, start: Double, stop: Double, clockwise: Bool) {
         renderer.arc(location: location, radius: radius, start: start, stop: stop, clockwise: clockwise)
     }
 
-    public func path(points: [Point], close: Bool) {
+    public func path(points: [Vec2], close: Bool) {
         renderer.path(points: points, close: close)
     }
 }

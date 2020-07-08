@@ -74,6 +74,6 @@ class Pastelizer: Canvas {
     }
 }
 
-let test = Pastelizer(size: Size(width: 900, height: 900), outputType: .pdf)
+let test = Pastelizer(size: Vec2(width: 900, height: 900), outputType: .pdf)
 test.draw()
 test.output(to: "/Users/andy.best/Desktop/cc/pastel_6.pdf")

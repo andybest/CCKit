@@ -10,7 +10,7 @@ import CoreGraphics
 
 class CoreGraphicsRenderer: Renderer {
     let type: OutputType
-    let size: Size
+    let size: Vec2
     let context: CGContext
 
     var pdfClosed = false
@@ -31,7 +31,7 @@ class CoreGraphicsRenderer: Renderer {
     var fillEnabled: Bool = true
     var strokeEnabled: Bool = true
 
-    init(type: OutputType, size: Size) {
+    init(type: OutputType, size: Vec2) {
         self.type = type
         self.size = size
 
@@ -115,20 +115,20 @@ class CoreGraphicsRenderer: Renderer {
         if strokeEnabled { context.stroke(rect.cgRect) }
     }
 
-    func line(p1: Point, p2: Point) {
+    func line(p1: Vec2, p2: Vec2) {
         if strokeEnabled {
             context.strokeLineSegments(between: [p1.cgPoint, p2.cgPoint])
         }
     }
 
-    func bezier(p1: Point, p2: Point, c1: Point, c2: Point) {
+    func bezier(p1: Vec2, p2: Vec2, c1: Vec2, c2: Vec2) {
         context.beginPath()
         context.move(to: p1.cgPoint)
         context.addCurve(to: p2.cgPoint, control1: c1.cgPoint, control2: c2.cgPoint)
         if strokeEnabled { context.strokePath() }
     }
 
-    func point(p: Point) {
+    func point(p: Vec2) {
         if strokeEnabled {
             let rect = CGRect(x: CGFloat(p.x), y: CGFloat(p.y), width: 1, height: 1)
             let tempFill = fillColor
@@ -147,7 +147,7 @@ class CoreGraphicsRenderer: Renderer {
         }
     }
 
-    func arc(location: Point, radius: Double, start: Double, stop: Double, clockwise: Bool = true) {
+    func arc(location: Vec2, radius: Double, start: Double, stop: Double, clockwise: Bool = true) {
         context.beginPath()
         context.addArc(center: location.cgPoint,
                        radius: CGFloat(radius),
@@ -158,7 +158,7 @@ class CoreGraphicsRenderer: Renderer {
         fillStroke()
     }
 
-    func path(points: [Point], close: Bool) {
+    func path(points: [Vec2], close: Bool) {
         guard !points.isEmpty else { return }
         guard points.count > 1 else {
             point(x: points[0].x, y: points[0].y)
