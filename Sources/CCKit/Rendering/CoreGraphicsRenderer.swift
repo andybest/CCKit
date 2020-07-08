@@ -172,7 +172,9 @@ class CoreGraphicsRenderer: Renderer {
             context.addLine(to: p.cgPoint)
         }
 
-        context.closePath()
+        if close {
+            context.closePath()
+        }
 
         fillStroke()
     }
